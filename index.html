@@ -59,6 +59,53 @@
       margin: 0 auto;
       max-width: 32rem;
     }
+    .install {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      max-width: 100%;
+      margin: 1.75rem 0 0;
+      padding: 0.7rem 0.9rem 0.7rem 1.1rem;
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--fg);
+      font: clamp(10px, 2.9vw, 15px)/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      cursor: pointer;
+      transition: border-color 120ms;
+    }
+    .install:hover, .install.copied { border-color: var(--accent); }
+    .install:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .install .p { color: var(--muted); user-select: none; }
+    .install code { font: inherit; white-space: nowrap; }
+    .install .icon {
+      display: inline-grid;
+      place-items: center;
+      width: 1.9em;
+      height: 1.9em;
+      border-radius: 6px;
+      color: var(--muted);
+      transition: color 120ms, background-color 120ms;
+    }
+    .install:hover .icon { color: var(--fg); background: var(--line); }
+    .install.copied .icon { color: var(--accent); background: transparent; }
+    .install svg { width: 1.15em; height: 1.15em; grid-area: 1 / 1; transition: opacity 120ms, transform 120ms; }
+    .install .check { opacity: 0; transform: scale(0.6); }
+    .install.copied .copy { opacity: 0; transform: scale(0.6); }
+    .install.copied .check { opacity: 1; transform: none; }
+    .platforms {
+      margin: 0.6rem 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
     .links {
       margin: 1.75rem 0 0;
       display: flex;
@@ -85,34 +132,72 @@
     }
     .links a.primary:hover { background: var(--accent); border-color: var(--accent); color: #0d1a13; }
     .links svg { width: 1.1em; height: 1.1em; fill: currentColor; }
-    pre {
-      background: var(--code-bg);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 0.9rem 1.1rem;
+    .terminal {
+      margin: 4.5rem 0 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #161615;
+      border: 1px solid #2c2c29;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 20px 50px -18px rgb(0 0 0 / 0.35);
+    }
+    .terminal .bar {
+      position: relative;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1f1f1d;
+      border-bottom: 1px solid #2c2c29;
+      color: #8a8a83;
+      font-size: 0.8rem;
+    }
+    .terminal .lights {
+      position: absolute;
+      left: 0.95rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .terminal .lights span { width: 0.75rem; height: 0.75rem; border-radius: 50%; }
+    .terminal .lights span:nth-child(1) { background: #ff5f57; }
+    .terminal .lights span:nth-child(2) { background: #febc2e; }
+    .terminal .lights span:nth-child(3) { background: #28c840; }
+    .terminal pre {
+      margin: 0;
+      padding: 1.2rem 1.35rem 1.4rem;
       overflow-x: auto;
-      font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      margin: 3rem 0 0;
+      color: #ecece6;
+      font: clamp(12px, 3.3vw, 14.5px)/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
-    pre .p { color: var(--muted); user-select: none; }
-    pre .c { color: var(--muted); }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 3rem 0 0;
-      border-top: 1px solid var(--line);
+    .terminal .c { color: #75756e; }
+    .terminal .p { color: var(--accent); user-select: none; }
+    .cursor {
+      display: inline-block;
+      width: 0.6em;
+      height: 1.2em;
+      vertical-align: -0.2em;
+      background: #ecece6;
+      animation: blink 1.1s steps(1) infinite;
     }
-    li {
-      padding: 1.1rem 0;
-      border-bottom: 1px solid var(--line);
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    .points { margin: 4rem 0 0; }
+    .points div {
+      display: grid;
+      grid-template-columns: 12rem 1fr;
+      gap: 0.25rem 1.5rem;
+      margin: 0 0 1.6rem;
     }
-    li strong { display: block; margin-bottom: 0.15rem; }
-    li span { color: var(--muted); }
+    .points dt { font-weight: 600; }
+    .points dd { margin: 0; color: var(--muted); }
+    @media (max-width: 600px) {
+      .points div { grid-template-columns: 1fr; }
+    }
+    code { font: 0.88em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     a { color: inherit; }
     footer {
-      margin-top: 3rem;
+      margin-top: 4rem;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-align: center;
     }
   </style>
@@ -124,6 +209,16 @@
       <h1>dwim</h1>
       <p class="tagline">A coding agent that runs on your own GPU.</p>
       <p class="sub">The agent, the model, and the engine that runs it, in one Rust program: no API key, no server, and nothing leaves your machine.</p>
+      <button class="install" type="button" aria-label="Copy the install command">
+        <span class="p" aria-hidden="true">$</span>
+        <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
+        <span class="icon" aria-hidden="true">
+          <svg class="copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-1a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg>
+          <svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>
+        </span>
+        <span class="visually-hidden" role="status"></span>
+      </button>
+      <p class="platforms">macOS on Apple silicon &middot; Linux with Vulkan on x86-64 and ARM64</p>
       <p class="links">
         <a class="primary" href="https://github.com/dwim-sh/dwim">
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -133,33 +228,62 @@
       </p>
     </header>
 
-<pre><code><span class="c"># install</span>
-<span class="p">$ </span>curl -fsSL https://dwim.sh/install.sh | sh
-
-<span class="c"># start the shell in a project directory</span>
+    <div class="terminal">
+      <div class="bar"><div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>~/project</div>
+<pre><code><span class="c"># start the shell in a project directory</span>
 <span class="p">$ </span>dwim
 
 <span class="c"># or ask one thing</span>
-<span class="p">$ </span>dwim "what changed in the last commit?"</code></pre>
+<span class="p">$ </span>dwim "what changed in the last commit?"
 
-    <ul>
-      <li>
-        <strong>A real coding agent.</strong>
-        <span>A shell where the model runs commands, reads their output, and keeps going until the task is done. It follows your project's <code>AGENTS.md</code>.</span>
-      </li>
-      <li>
-        <strong>A 27B model in 6 GB.</strong>
-        <span>Bonsai 2 27B, PrismML's ternary version of Qwen3.8-27B: every weight is -1, 0, or 1, so it fits on a laptop GPU.</span>
-      </li>
-      <li>
-        <strong>Its own inference engine.</strong>
-        <span>No llama.cpp, no CUDA. Metal on macOS, Vulkan everywhere else, and a CPU reference the GPU kernels are tested against.</span>
-      </li>
-    </ul>
+<span class="p">$ </span><span class="cursor" aria-hidden="true"></span></code></pre>
+    </div>
+
+    <dl class="points">
+      <div>
+        <dt>A real coding agent</dt>
+        <dd>A shell where the model runs commands, reads their output, and keeps going until the task is done. It follows your project's <code>AGENTS.md</code>.</dd>
+      </div>
+      <div>
+        <dt>A 27B model in 6 GB</dt>
+        <dd>Bonsai 2 27B, PrismML's ternary version of Qwen3.8-27B: every weight is -1, 0, or 1, so it fits on a laptop GPU.</dd>
+      </div>
+      <div>
+        <dt>Its own inference engine</dt>
+        <dd>No llama.cpp, no CUDA. Metal on macOS, Vulkan everywhere else, and a CPU reference the GPU kernels are tested against.</dd>
+      </div>
+    </dl>
 
     <footer>
       MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a>
     </footer>
   </main>
+  <script>
+    // Copies the install command, and shows a check on the button for a moment.
+    const install = document.querySelector(".install");
+    let timer;
+    install.addEventListener("click", async () => {
+      const command = install.querySelector("code").textContent;
+      try {
+        await navigator.clipboard.writeText(command);
+      } catch {
+        const area = document.createElement("textarea");
+        area.value = command;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.append(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      install.classList.add("copied");
+      install.querySelector("[role=status]").textContent = "Copied";
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        install.classList.remove("copied");
+        install.querySelector("[role=status]").textContent = "";
+      }, 1600);
+    });
+  </script>
 </body>
 </html>
