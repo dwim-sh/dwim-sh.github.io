@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dwim</title>
+  <meta name="description" content="dwim is a coding agent that runs on your own GPU. The agent, the model, and the engine in one Rust program: no API key, no server, nothing leaves your machine.">
+  <link rel="icon" href="hero.png">
+  <style>
+    :root {
+      --bg: #fafaf7;
+      --fg: #1c1c1a;
+      --muted: #6b6b66;
+      --accent: #3ec98a;
+      --line: #e4e4df;
+      --code-bg: #f0f0eb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #131312;
+        --fg: #ecece8;
+        --muted: #9a9a94;
+        --line: #2a2a27;
+        --code-bg: #1e1e1c;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 5rem 1.25rem 4rem;
+    }
+    header { text-align: center; }
+    header img {
+      width: 160px;
+      height: 160px;
+      display: block;
+      margin: 0 auto 1.25rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+    .tagline {
+      font-size: 1.2rem;
+      margin: 0 0 0.75rem;
+    }
+    .sub {
+      color: var(--muted);
+      margin: 0 auto;
+      max-width: 32rem;
+    }
+    .links {
+      margin: 1.75rem 0 0;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--fg);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .links a:hover { border-color: var(--accent); }
+    .links a.primary {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+    .links a.primary:hover { background: var(--accent); border-color: var(--accent); color: #0d1a13; }
+    .links svg { width: 1.1em; height: 1.1em; fill: currentColor; }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      overflow-x: auto;
+      font: 0.95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin: 3rem 0 0;
+    }
+    pre .p { color: var(--muted); user-select: none; }
+    pre .c { color: var(--muted); }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 3rem 0 0;
+      border-top: 1px solid var(--line);
+    }
+    li {
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    li strong { display: block; margin-bottom: 0.15rem; }
+    li span { color: var(--muted); }
+    a { color: inherit; }
+    footer {
+      margin-top: 3rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="hero.png" alt="dwim logo: a small robot sitting cross-legged, eyes closed, at peace">
+      <h1>dwim</h1>
+      <p class="tagline">A coding agent that runs on your own GPU.</p>
+      <p class="sub">The agent, the model, and the engine that runs it, in one Rust program: no API key, no server, and nothing leaves your machine.</p>
+      <p class="links">
+        <a class="primary" href="https://github.com/dwim-sh/dwim">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">Model: Bonsai 2 27B</a>
+      </p>
+    </header>
+
+<pre><code><span class="c"># install</span>
+<span class="p">$ </span>cargo install --git https://github.com/dwim-sh/dwim
+
+<span class="c"># start the shell in a project directory</span>
+<span class="p">$ </span>dwim
+
+<span class="c"># or ask one thing</span>
+<span class="p">$ </span>dwim "what changed in the last commit?"</code></pre>
+
+    <ul>
+      <li>
+        <strong>A real coding agent.</strong>
+        <span>A shell where the model runs commands, reads their output, and keeps going until the task is done. It follows your project's <code>AGENTS.md</code>.</span>
+      </li>
+      <li>
+        <strong>A 27B model in 6 GB.</strong>
+        <span>Bonsai 2 27B, PrismML's ternary version of Qwen3.8-27B: every weight is -1, 0, or 1, so it fits on a laptop GPU.</span>
+      </li>
+      <li>
+        <strong>Its own inference engine.</strong>
+        <span>No llama.cpp, no CUDA. Metal on macOS, Vulkan everywhere else, and a CPU reference the GPU kernels are tested against.</span>
+      </li>
+    </ul>
+
+    <footer>
+      MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a>
+    </footer>
+  </main>
+</body>
+</html>
