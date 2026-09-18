@@ -38,21 +38,35 @@
       padding: 5rem 1.25rem 4rem;
     }
     header { text-align: center; }
-    header img {
-      width: 160px;
-      height: 160px;
-      display: block;
-      margin: 0 auto 1.25rem;
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      margin: 0 0 1.5rem;
+      text-align: left;
+    }
+    .brand img {
+      width: 132px;
+      height: 132px;
+      flex: none;
     }
     h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      line-height: 1;
+      letter-spacing: -0.03em;
       margin: 0 0 0.5rem;
     }
     .tagline {
       font-size: 1.2rem;
-      margin: 0 0 0.75rem;
+      margin: 0;
+    }
+    @media (max-width: 600px) {
+      .brand { gap: 0.9rem; }
+      .brand img { width: 88px; height: 88px; }
+      h1 { font-size: 2.25rem; }
+      .tagline { font-size: 1.05rem; }
     }
     .sub {
       color: var(--muted);
@@ -205,9 +219,13 @@
 <body>
   <main>
     <header>
-      <img src="hero.png" alt="dwim logo: a small robot sitting cross-legged, eyes closed, at peace">
-      <h1>dwim</h1>
-      <p class="tagline">A coding agent that runs on your own GPU.</p>
+      <div class="brand">
+        <img src="hero.png" alt="dwim logo: a small robot sitting cross-legged, eyes closed, at peace">
+        <div>
+          <h1>dwim</h1>
+          <p class="tagline">A coding agent that runs on your own GPU.</p>
+        </div>
+      </div>
       <p class="sub">The agent, the model, and the engine that runs it, in one Rust program: no API key, no server, and nothing leaves your machine.</p>
       <button class="install" type="button" aria-label="Copy the install command">
         <span class="p" aria-hidden="true">$</span>
