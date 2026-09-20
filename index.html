@@ -259,20 +259,20 @@
 
     <dl class="points">
       <div>
-        <dt>A real coding agent</dt>
-        <dd>A shell where the model runs commands, reads their output, and keeps going until the task is done. It follows your project's <code>AGENTS.md</code>.</dd>
+        <dt>Fully local coding agent</dt>
+        <dd>Runs commands, reads their output, and keeps going.</dd>
       </div>
       <div>
-        <dt>A 27B model in 6 GB</dt>
-        <dd>Bonsai 2 27B, PrismML's ternary version of Qwen3.8-27B: every weight is -1, 0, or 1, so it fits on a laptop GPU.</dd>
+        <dt>Bonsai 2 27B model</dt>
+        <dd>Qwen3.8-27B compressed to 6 GB with ternary weights.</dd>
       </div>
       <div>
-        <dt>Its own inference engine</dt>
-        <dd>No llama.cpp. Metal on macOS, Vulkan everywhere else, and a CPU reference the GPU kernels are tested against.</dd>
+        <dt>Fast local inference</dt>
+        <dd>Metal on macOS, Vulkan on Linux.</dd>
       </div>
       <div>
-        <dt>No sandboxing</dt>
-        <dd><code>dwim</code> assumes it is already running in a sandbox, such as a container or a VM, and does no sandboxing of its own: the model runs the commands it wants, without asking.</dd>
+        <dt>No sandbox</dt>
+        <dd>Expects to run inside one. Commands run without confirmation.</dd>
       </div>
     </dl>
 
