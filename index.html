@@ -190,9 +190,8 @@
     }
     .demo figcaption { margin: 1.1rem 0 0; text-align: center; color: var(--dim); font-size: 0.9rem; }
     @media (max-width: 700px) {
-      /* Keep the recording legible: it scrolls sideways instead of shrinking. */
-      .demo .screen { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .demo .player { min-width: 560px; }
+      .demo .player { padding: 0.7rem 0.5rem 0.4rem; }
+      .demo .ap-wrapper { display: flex; justify-content: center; }
       .demo .mascot { display: none; }
       .demo figcaption { text-align: left; }
     }
@@ -451,15 +450,18 @@
 
   <script src="vendor/asciinema-player.js"></script>
   <script>
-    // Plays the recording as text, looping, with no controls.
-    AsciinemaPlayer.create("demo/hello-demo.cast", document.getElementById("player"), {
+    // Plays the recording as text, looping, with no controls. A phone gets a
+    // recording made at 46 columns, the narrowest the shell's input box fits.
+    const phone = matchMedia("(max-width: 700px)").matches;
+    AsciinemaPlayer.create(phone ? "demo/hello-phone.cast" : "demo/hello-demo.cast", document.getElementById("player"), {
       autoPlay: true,
       loop: true,
       controls: false,
       preload: true,
-      cols: 64,
-      rows: 15,
-      fit: "width",
+      cols: phone ? 46 : 64,
+      rows: phone ? 14 : 15,
+      fit: phone ? false : "width",
+      terminalFontSize: phone ? "11px" : "small",
       theme: "dwim",
       terminalFontFamily: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
       terminalLineHeight: 1.2,
