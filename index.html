@@ -270,6 +270,10 @@
         <dt>Its own inference engine</dt>
         <dd>No llama.cpp. Metal on macOS, Vulkan everywhere else, and a CPU reference the GPU kernels are tested against.</dd>
       </div>
+      <div>
+        <dt>No sandboxing</dt>
+        <dd><code>dwim</code> assumes it is already running in a sandbox, such as a container or a VM, and does no sandboxing of its own: the model runs the commands it wants, without asking.</dd>
+      </div>
     </dl>
 
     <footer>
