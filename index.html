@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>dwim: a coding agent that runs on your own GPU</title>
-  <meta name="description" content="A coding agent that runs on your device. No account, no API key, no token bill, and your code never leaves your system.">
+  <title>dwim: a coding agent you control.</title>
+  <meta name="description" content="dwim is an AI coding agent that runs on your own GPU. Give it a task and it reads your code, edits files, and runs commands. Open source. No account, no API key, no token bill.">
   <link rel="icon" href="hero.png">
   <meta property="og:title" content="dwim">
-  <meta property="og:description" content="A coding agent that runs on your device. No account, no API key, no token bill, and your code never leaves your system.">
+  <meta property="og:description" content="dwim is an AI coding agent that runs on your own GPU. Give it a task and it reads your code, edits files, and runs commands. Open source. No account, no API key, no token bill.">
   <meta property="og:image" content="https://dwim.sh/poster.png">
   <meta property="og:url" content="https://dwim.sh/">
   <meta name="twitter:card" content="summary_large_image">
@@ -92,9 +92,9 @@
       line-height: 1.05;
       letter-spacing: -0.035em;
       margin: 0 auto 1.2rem;
-      max-width: 18ch;
+      max-width: 24ch;
     }
-    .hero h1 em { font-style: normal; color: var(--accent-ink); }
+    .hero h1 em { font-style: normal; color: var(--accent-ink); white-space: nowrap; }
     .hero .lede {
       font-size: 1.2rem;
       color: var(--muted);
@@ -268,34 +268,11 @@
       font-size: 0.78rem;
       font-weight: 700;
     }
-    .trits {
-      margin: 1.1rem 0 0.5rem;
-      display: grid;
-      grid-template-columns: repeat(30, 1fr);
-      gap: 3px;
-    }
-    .trits i, .model-legend i { display: block; aspect-ratio: 1; border-radius: 2px; }
-    .trits i { animation: settle 900ms ease-out both; }
-    .trits i:nth-child(7n+1) { animation-delay: 60ms; }
-    .trits i:nth-child(7n+2) { animation-delay: 220ms; }
-    .trits i:nth-child(7n+3) { animation-delay: 140ms; }
-    .trits i:nth-child(7n+4) { animation-delay: 380ms; }
-    .trits i:nth-child(7n+5) { animation-delay: 30ms; }
-    .trits i:nth-child(7n+6) { animation-delay: 300ms; }
-    .trits i:nth-child(7n+7) { animation-delay: 180ms; }
-    @keyframes settle { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: none; } }
-    @media (prefers-reduced-motion: reduce) { .trits i { animation: none; } }
-    .trits .n, .model-legend .n { background: var(--fg); }
-    .trits .z, .model-legend .z { background: #e9e7e0; }
-    .trits .p, .model-legend .p { background: var(--accent); }
-    .model-legend { display: flex; gap: 1.1rem; font-family: var(--mono); font-size: 0.78rem; color: var(--dim); }
-    .model-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
-    .model-legend i { width: 0.7rem; }
     .model-spec { margin: 1.1rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1.4rem; font-size: 0.95rem; }
     .model-spec dt { color: var(--muted); }
     .model-spec dd { margin: 0; font-family: var(--mono); font-size: 0.88rem; }
     .model-size { margin: 1.2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); display: grid; gap: 0.5rem; }
-    .model-size .row { display: grid; grid-template-columns: 4.2rem 1fr 3.2rem; align-items: center; gap: 0.7rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+    .model-size .row { display: grid; grid-template-columns: 10ch 1fr 6ch; align-items: center; gap: 0.7rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
     .model-size .row span:last-child { text-align: right; color: var(--fg); }
     .model-size .bar { height: 0.6rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
     .model-size .bar b { display: block; height: 100%; border-radius: 999px; background: var(--line-2); }
@@ -336,8 +313,8 @@
 
   <main>
     <section class="hero wrap">
-      <h1>A coding agent that runs on <em>your own GPU.</em></h1>
-      <p class="lede">A coding agent that runs on your device. No account, no API key, no token bill, and your code never leaves your system.</p>
+      <h1>A coding agent<br><em>you control.</em></h1>
+      <p class="lede">dwim is an AI coding agent that runs on your own GPU. Give it a task and it reads your code, edits files, and runs commands.<br><br>Open source. No account, no API key, no token bill.</p>
       <button class="install" type="button" aria-label="Copy the install command" data-command="curl -fsSL https://dwim.sh/install.sh | sh">
         <span class="p" aria-hidden="true">$</span>
         <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
@@ -362,26 +339,45 @@
 
       <div class="card warn notice">
         <h3>Warning</h3>
-        <p>dwim is experimental software. Expect bugs, rough edges, and changes that break things from one commit to the next. The model runs shell commands on your machine without asking first, so use it on code you have committed or backed up.</p>
+        <p>dwim is experimental software. Expect bugs, rough edges, and changes that break things from one commit to the next. The model runs shell commands on your machine without asking first, and dwim does not sandbox them, so run it in a container or a virtual machine, on code you have committed or backed up.</p>
       </div>
     </section>
 
     <section class="pairs wrap">
       <div class="pair">
         <div class="text">
-          <h2>Nothing leaves your machine.</h2>
-          <p>The model runs on your GPU, so your code, your prompts, and whatever is in your <code>.env</code> stay where they are. It works on a plane, on code you are not allowed to upload, and the thousandth question costs what the first did.</p>
-          <p>Give it a prompt on the command line and the reply is all that comes out on standard output, so it slots into a script like any other tool.</p>
+          <h2>An interactive shell. A scriptable tool.</h2>
+          <p>Run dwim to open an interactive shell and work through a task with the agent.</p>
+          <p>Or pass a prompt on the command line. dwim prints only the reply to standard output, so you can redirect it or call it from your scripts.</p>
         </div>
-<pre class="term wrap-lines"><code><span class="p">$ </span>dwim "What changed in the last commit? One sentence."
-<span class="g">The last commit changed the CLI so the shell stops drawing a bullet line while a reply still has no text yet (e.g., while the model is in a thought, writing blank lines, or executing a tool call), which previously left a bare bullet until the text or tool call arrived.</span></code></pre>
+<pre class="term wrap-lines"><code><span class="p">$ </span>dwim
+<span class="p">$ </span>dwim "Explain the locking assumptions in this module."
+<span class="p">$ </span>dwim "Add a regression test for this failing case."
+<span class="p">$ </span>dwim "Find the allocation hot spots in this benchmark."</code></pre>
       </div>
 
       <div class="pair">
         <div class="text">
-          <h2>A 27B model that fits on your GPU.</h2>
-          <p>dwim ships with Bonsai 2 27B: Qwen3.8-27B with every weight compressed to -1, 0, or 1 by <a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">PrismML</a>. The model takes 6 GB instead of 54, which is what puts 27 billion parameters on a laptop.</p>
-          <p>It thinks before it answers, calls tools to read files and run commands, and follows your project's <code>AGENTS.md</code>.</p>
+          <h2>Nothing leaves your machine unless you want it to.</h2>
+          <p>Your code and prompts stay local. Work on a plane or on code you can't upload. Once the model is downloaded, dwim works offline.</p>
+          <p>Run it as often as you need without watching a token budget.</p>
+        </div>
+        <div class="card">
+          <h3>What you don't need</h3>
+          <ul>
+            <li>An account</li>
+            <li>An API key</li>
+            <li>A token budget</li>
+            <li>A network connection, once the model is downloaded</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="text">
+          <h2>A powerful model. A small footprint.</h2>
+          <p>Bonsai 2 27B reads files, runs tools, and follows your project's <code>AGENTS.md</code>. Its 27 billion parameters fit in about 6 GiB of memory.</p>
+          <p><a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">PrismML</a> compressed it from Qwen3.8-27B, which needs 50 GiB of memory.</p>
         </div>
         <div class="model" aria-label="Model card">
           <div class="model-head">
@@ -390,34 +386,31 @@
               <strong class="model-name">Bonsai 2 27B</strong>
               <span class="model-by">by <a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">PrismML</a></span>
             </div>
-            <span class="model-badge">ternary</span>
+            <span class="model-badge">6 GiB</span>
           </div>
-          <div class="trits" aria-hidden="true"><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="p"></i><i class="n"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="n"></i><i class="z"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="p"></i><i class="z"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="n"></i><i class="p"></i></div>
-          <div class="model-legend" aria-hidden="true"><span><i class="n"></i>-1</span><span><i class="z"></i>0</span><span><i class="p"></i>1</span></div>
           <dl class="model-spec">
             <dt>Base</dt><dd>Qwen3.8-27B</dd>
             <dt>Parameters</dt><dd>27 billion</dd>
-            <dt>Each weight</dt><dd>-1, 0, or 1</dd>
           </dl>
           <div class="model-size">
-            <div class="row"><span>16-bit</span><div class="bar"><b style="width:100%"></b></div><span>54 GB</span></div>
-            <div class="row"><span>ternary</span><div class="bar"><b class="on" style="width:11%"></b></div><span>6 GB</span></div>
+            <div class="row"><span>Original</span><div class="bar"><b style="width:100%"></b></div><span>50 GiB</span></div>
+            <div class="row"><span>Compressed</span><div class="bar"><b class="on" style="width:12%"></b></div><span>6 GiB</span></div>
           </div>
         </div>
       </div>
 
       <div class="pair">
         <div class="text">
-          <h2>Will it run on my machine?</h2>
-          <p>Probably. The model needs about 6 GB of memory on the device, plus room for the conversation. The session at the top of this page ran on an 8 GB AMD card from 2019.</p>
-          <p>Something older or smaller can still run it on the CPU with <code>--device cpu</code>, slowly.</p>
+          <h2>Does it run on my machine?</h2>
+          <p>Yes, if your GPU has 8 GiB of memory. The model takes about 6 GiB, and the conversation needs the rest. An AMD card from 2019 is enough.</p>
+          <p>You can even run it on the CPU, slowly.</p>
         </div>
         <div class="card">
           <h3>Requirements</h3>
           <ul>
-            <li>A GPU with at least 8 GiB of VRAM.</li>
-            <li>Linux or macOS as the operating system.</li>
-            <li>6 GiB of disk space for the model.</li>
+            <li><strong>Apple silicon:</strong> 16 GiB of memory</li>
+            <li><strong>Linux:</strong> Vulkan GPU, 8 GiB of VRAM</li>
+            <li><strong>Disk space:</strong> 6 GiB</li>
           </ul>
         </div>
       </div>
@@ -425,7 +418,7 @@
 
     <section class="cta wrap" id="install">
       <h2>Try it out on your machine.</h2>
-      <p>One command to install. One more to start.</p>
+      <p>Install dwim, open a repository, and give it a task.</p>
       <button class="install" type="button" aria-label="Copy the install command" data-command="curl -fsSL https://dwim.sh/install.sh | sh">
         <span class="p" aria-hidden="true">$</span>
         <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
@@ -445,7 +438,7 @@
   </main>
 
   <footer class="wrap">
-    MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a> &middot; model by <a href="https://huggingface.co/prism-ml">PrismML</a>
+    dwim: do what I mean &middot; MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a> &middot; model by <a href="https://huggingface.co/prism-ml">PrismML</a>
   </footer>
 
   <script src="vendor/asciinema-player.js"></script>
