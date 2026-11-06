@@ -12,4 +12,4 @@ Type "clear; asciinema play -q hello-demo.cast"
 Enter
 Sleep 400ms
 Show
-Sleep 12.95s
+Sleep 12.47s

@@ -1,9 +1,10 @@
 """Rewrites the timing of a dwim session cast for a demo.
 
-The model's own pace is kept. Loading the model is dropped, since the shell
-draws relative to the cursor and starts the same without it. Of the
-recorder's pauses, the wait before typing is capped, the typed characters are
-spaced evenly, the exit is dropped, and the last frame is held.
+The model's own pace is kept. Loading the model and reading the system
+prompt are dropped, since the shell draws relative to the cursor and starts
+the same without them. Of the recorder's pauses, the wait before typing is
+capped, the typed characters are spaced evenly, the exit is dropped, and the
+last frame is held.
 """
 import json, re, sys
 
@@ -21,7 +22,7 @@ for e in ev:
     s = strip(e[2]); d = e[0]
     # A redraw can arrive in pieces; only a piece that opens one moves the state.
     if not e[2].startswith('\x1b[?2026h'): pass
-    elif state == 'load' and 'Loading' not in s and 'Ask anything' in s: state = 'ready'
+    elif state == 'load' and not re.search(r'Loading|Reading system prompt', s) and 'Ask anything' in s: state = 'ready'
     elif state == 'ready' and re.search(r'│ › \S', s): state = 'type'
     elif state == 'type' and 'Reading' in s: state = 'think'
     elif state == 'think' and 'Generating' in s: state = 'reply'
