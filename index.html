@@ -272,7 +272,7 @@
     .model-spec dt { color: var(--muted); }
     .model-spec dd { margin: 0; font-family: var(--mono); font-size: 0.88rem; }
     .model-size { margin: 1.2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); display: grid; gap: 0.5rem; }
-    .model-size .row { display: grid; grid-template-columns: 10ch 1fr 6ch; align-items: center; gap: 0.7rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+    .model-size .row { display: grid; grid-template-columns: 14ch 1fr 6ch; align-items: center; gap: 0.7rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
     .model-size .row span:last-child { text-align: right; color: var(--fg); }
     .model-size .bar { height: 0.6rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
     .model-size .bar b { display: block; height: 100%; border-radius: 999px; background: var(--line-2); }
@@ -334,7 +334,7 @@
           </div>
         </div>
         <img class="mascot" src="hero.png" alt="">
-        <figcaption>Recorded on a Radeon RX 5700 XT from 2019, played back at the speed it runs.</figcaption>
+        <figcaption>Recorded with an earlier release on a Radeon RX 5700 XT from 2019, played back at the speed it ran.</figcaption>
       </figure>
 
       <div class="card warn notice">
@@ -375,26 +375,26 @@
 
       <div class="pair">
         <div class="text">
-          <h2>A powerful model. A small footprint.</h2>
-          <p>Bonsai 2 27B reads files, runs tools, and follows your project's <code>AGENTS.md</code>. Its 27 billion parameters fit in about 6 GiB of memory.</p>
-          <p><a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">PrismML</a> compressed it from Qwen3.8-27B, which needs 50 GiB of memory.</p>
+          <h2>A powerful model. On your own machine.</h2>
+          <p><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B</a> reads files, runs tools, and follows your project's <code>AGENTS.md</code>. dwim runs it at four bits, where its 27 billion parameters take 16 GB instead of 54.</p>
+          <p>It decodes several tokens at a time: a drafter the model ships guesses the next few, and the model checks them all in one pass.</p>
         </div>
         <div class="model" aria-label="Model card">
           <div class="model-head">
             <div>
               <span class="model-eyebrow">The model</span>
-              <strong class="model-name">Bonsai 2 27B</strong>
-              <span class="model-by">by <a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">PrismML</a></span>
+              <strong class="model-name">Qwen3.8-27B</strong>
+              <span class="model-by">by <a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen</a></span>
             </div>
-            <span class="model-badge">6 GiB</span>
+            <span class="model-badge">16 GB</span>
           </div>
           <dl class="model-spec">
-            <dt>Base</dt><dd>Qwen3.8-27B</dd>
             <dt>Parameters</dt><dd>27 billion</dd>
+            <dt>Weights</dt><dd>4-bit <a href="https://huggingface.co/bartowski/Qwen3.8-27B-GGUF">GGUF</a></dd>
           </dl>
           <div class="model-size">
-            <div class="row"><span>Original</span><div class="bar"><b style="width:100%"></b></div><span>50 GiB</span></div>
-            <div class="row"><span>Compressed</span><div class="bar"><b class="on" style="width:12%"></b></div><span>6 GiB</span></div>
+            <div class="row"><span>Full precision</span><div class="bar"><b style="width:100%"></b></div><span>54 GB</span></div>
+            <div class="row"><span>Four bits</span><div class="bar"><b class="on" style="width:30%"></b></div><span>16 GB</span></div>
           </div>
         </div>
       </div>
@@ -402,15 +402,15 @@
       <div class="pair">
         <div class="text">
           <h2>Does it run on my machine?</h2>
-          <p>Yes, if your GPU has 8 GiB of memory. The model takes about 6 GiB, and the conversation needs the rest. An AMD card from 2019 is enough.</p>
+          <p>Yes, if it has the memory. The weights take 16 GB and the conversation needs the rest, so dwim wants a Mac with 32 GiB or a Linux GPU with 24 GB of VRAM. It refuses to start on a Mac with less.</p>
           <p>You can even run it on the CPU, slowly.</p>
         </div>
         <div class="card">
           <h3>Requirements</h3>
           <ul>
-            <li><strong>Apple silicon:</strong> 16 GiB of memory</li>
-            <li><strong>Linux:</strong> Vulkan GPU, 8 GiB of VRAM</li>
-            <li><strong>Disk space:</strong> 6 GiB</li>
+            <li><strong>Apple silicon:</strong> 32 GiB of memory</li>
+            <li><strong>Linux:</strong> Vulkan GPU, 24 GB of VRAM</li>
+            <li><strong>Disk space:</strong> 16 GB</li>
           </ul>
         </div>
       </div>
@@ -438,7 +438,7 @@
   </main>
 
   <footer class="wrap">
-    dwim: do what I mean &middot; MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a> &middot; model by <a href="https://huggingface.co/prism-ml">PrismML</a>
+    dwim: do what I mean &middot; MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a> &middot; model by <a href="https://huggingface.co/Qwen">Qwen</a>
   </footer>
 
   <script src="vendor/asciinema-player.js"></script>

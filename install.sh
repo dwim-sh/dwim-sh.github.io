@@ -79,7 +79,7 @@ main() {
     echo
     say "    ${bold}dwim$reset"
     echo
-    say "${dim}The first run fetches the model (6 GB). After that, it all runs on this machine.$reset"
+    say "${dim}The first run fetches the model (16 GB). After that, it all runs on this machine.$reset"
     echo
 }
 
