@@ -358,6 +358,24 @@
 
       <div class="pair">
         <div class="text">
+          <h2>Load the model once. Run several sessions.</h2>
+          <p>The first dwim you run starts a local server in the background that loads the model. Every dwim after it connects to that server and is ready in a moment, instead of loading 16 GB again.</p>
+          <p>Sessions share the weights, and each keeps its own context, so you can work in two terminals at once. Type <code>/server</code> in the shell to see it, stop it, or restart it.</p>
+        </div>
+        <div class="card">
+          <h3>The dwim server</h3>
+          <ul>
+            <li>Starts on its own the first time you run dwim</li>
+            <li>Shares the weights, with a context for each session</li>
+            <li>Has room for <strong>two sessions</strong> by default; <code>--sessions</code> sets how many</li>
+            <li>Listens on a Unix socket, not the network</li>
+            <li>Exits after ten minutes without a session</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pair">
+        <div class="text">
           <h2>Nothing leaves your machine unless you want it to.</h2>
           <p>Your code and prompts stay local. Work on a plane or on code you can't upload. Once the model is downloaded, dwim works offline.</p>
           <p>Run it as often as you need without watching a token budget.</p>
@@ -402,7 +420,7 @@
       <div class="pair">
         <div class="text">
           <h2>Does it run on my machine?</h2>
-          <p>Yes, if it has the memory. The weights take 16 GB and the conversation needs the rest, so dwim wants a Mac with 32 GiB or a Linux GPU with 24 GB of VRAM. It refuses to start on a Mac with less.</p>
+          <p>Yes, if it has the memory. The weights take 16 GB and the sessions' conversations share the rest, so dwim wants a Mac with 32 GiB or a Linux GPU with 24 GB of VRAM. It refuses to start on a Mac with less.</p>
           <p>You can even run it on the CPU, slowly.</p>
         </div>
         <div class="card">
