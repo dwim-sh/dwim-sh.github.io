@@ -4,47 +4,85 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>dwim: a coding agent you control.</title>
-  <meta name="description" content="dwim is an AI coding agent that runs on your own GPU. Give it a task and it reads your code, edits files, and runs commands. Open source. No account, no API key, no token bill.">
+  <meta name="description" content="dwim is an open source AI coding agent that is local by default. It runs on your own GPU, with no account, no API key, and no token bill, and reaches a bigger model at OpenRouter only when you ask.">
   <link rel="icon" href="hero.png">
   <meta property="og:title" content="dwim">
-  <meta property="og:description" content="dwim is an AI coding agent that runs on your own GPU. Give it a task and it reads your code, edits files, and runs commands. Open source. No account, no API key, no token bill.">
+  <meta property="og:description" content="dwim is an open source AI coding agent that is local by default. It runs on your own GPU, with no account, no API key, and no token bill, and reaches a bigger model at OpenRouter only when you ask.">
   <meta property="og:image" content="https://dwim.sh/poster.png">
   <meta property="og:url" content="https://dwim.sh/">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#08090a" media="(prefers-color-scheme: dark)">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/asciinema-player.css">
   <style>
     :root {
-      --bg: #fbfaf7;
-      --bg-2: #f4f3ef;
-      --card: #ffffff;
-      --term: #161615;
-      --line: #e6e4de;
-      --line-2: #d8d5cd;
-      --fg: #1c1c1a;
-      --muted: #64645e;
-      --dim: #8c8c86;
+      color-scheme: dark;
+      --bg: #08090a;
+      --bg-2: #0b0c0d;
+      --card: #0f1011;
+      --card-hover: #131416;
+      --line: #1b1c1e;
+      --line-2: #292b2e;
+      --line-3: #4a4d52;
+      --fg: #f7f8f8;
+      --muted: #8a8f98;
+      --dim: #62666d;
       --accent: #3ec98a;
-      --accent-ink: #1a8a5c;
-      --sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --accent-ink: #3ec98a;
+      --tint: 255 255 255;
+      --head-a: #ffffff;
+      --head-b: #a4a8b0;
+      --primary-hover: #d0d2d6;
+      --warn: #e8c268;
+      --shade: rgb(0 0 0 / 0.8);
+      --term: #0a0a0b;
+      --term-bar: #111213;
+      --term-line: #292b2e;
+      --term-dot: #2e3033;
+      --term-fg: #f7f8f8;
+      --term-dim: #62666d;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --bg: #ffffff;
+        --bg-2: #fafafa;
+        --card: #fafafa;
+        --card-hover: #f2f2f2;
+        --line: #ebebeb;
+        --line-2: #dcdcdc;
+        --line-3: #a8a8a8;
+        --fg: #0a0a0a;
+        --muted: #5c5f66;
+        --dim: #8b8e94;
+        --accent-ink: #14804f;
+        --tint: 0 0 0;
+        --head-a: #000000;
+        --head-b: #4b4f57;
+        --primary-hover: #33363b;
+        --warn: #8f5f00;
+        --shade: rgb(0 0 0 / 0.22);
+      }
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     html, body { margin: 0; padding: 0; }
     body {
-      background: var(--bg);
+      background: radial-gradient(64rem 34rem at 50% -8rem, rgb(62 201 138 / 0.09), transparent 70%) no-repeat, var(--bg);
       color: var(--fg);
-      font: 17px/1.6 var(--sans);
+      font: 16px/1.6 var(--sans);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
     a { color: inherit; }
     code, pre, kbd { font-family: var(--mono); }
-    .wrap { width: min(100% - 2.5rem, 52rem); margin: 0 auto; }
-    .narrow { width: min(100% - 2.5rem, 44rem); margin: 0 auto; }
+    .wrap { width: min(100% - 2.5rem, 68rem); margin: 0 auto; }
 
     /* Nav */
     .nav {
@@ -56,16 +94,18 @@
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      font-weight: 700;
+      gap: 0.55rem;
+      font-weight: 600;
       font-size: 1.15rem;
       letter-spacing: -0.01em;
       text-decoration: none;
     }
-    .nav-links { display: flex; align-items: center; gap: 1.4rem; font-size: 0.95rem; }
-    .nav-links a { color: var(--muted); text-decoration: none; }
+    .brand img { width: 30px; height: 30px; }
+    .nav-links { display: flex; align-items: center; gap: 1.6rem; font-size: 0.95rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; transition: color 120ms; }
     .nav-links a:hover { color: var(--fg); }
     .nav-links a.button { color: var(--bg); }
+    @media (max-width: 600px) { .nav-links .section-link { display: none; } }
     .button {
       display: inline-flex;
       align-items: center;
@@ -73,34 +113,39 @@
       padding: 0.55rem 1.05rem;
       border-radius: 999px;
       border: 1px solid var(--line-2);
+      background: var(--card);
       color: var(--fg);
       text-decoration: none;
       font-weight: 500;
       font-size: 0.95rem;
       transition: border-color 120ms, background-color 120ms;
     }
-    .button:hover { border-color: var(--accent); }
+    .button:hover { border-color: var(--line-3); }
     .button.primary { background: var(--fg); border-color: var(--fg); color: var(--bg); }
-    .button.primary:hover { background: var(--accent-ink); border-color: var(--accent-ink); }
+    .button.primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
     .button svg { width: 1.05em; height: 1.05em; fill: currentColor; }
 
     /* Hero */
-    .hero { padding: 4.5rem 0 3rem; text-align: center; }
+    .hero { padding: 4rem 0 0; text-align: center; }
     .hero h1 {
-      font-size: clamp(2.3rem, 5.6vw, 4rem);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.035em;
-      margin: 0 auto 1.2rem;
-      max-width: 24ch;
+      font-size: clamp(2.6rem, 6.4vw, 4.6rem);
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      margin: 0 auto 1.1rem;
     }
-    .hero h1 em { font-style: normal; color: var(--accent-ink); white-space: nowrap; }
+    .hero h1 { background: linear-gradient(180deg, var(--head-a) 35%, var(--head-b)); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: 0.08em; }
+    .hero h1 em { font-style: normal; white-space: nowrap; }
     .hero .lede {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+      line-height: 1.5;
       color: var(--muted);
-      max-width: 36rem;
+      max-width: 38rem;
       margin: 0 auto 2rem;
+      text-wrap: balance;
     }
+    .hero-actions { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+    .hero-actions .button { border-radius: 12px; padding: 0 1.15rem; min-height: 2.9rem; }
     .install {
       display: inline-flex;
       align-items: center;
@@ -115,9 +160,10 @@
       cursor: pointer;
       transition: border-color 120ms;
     }
-    .install:hover, .install.copied { border-color: var(--accent); }
+    .install:hover { border-color: var(--line-3); }
+    .install.copied { border-color: var(--accent); }
     .install:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .install .p { color: var(--accent-ink); font-weight: 700; user-select: none; }
+    .install .p { color: var(--accent-ink); font-weight: 600; user-select: none; }
     .install code { font: inherit; white-space: nowrap; }
     .install .icon {
       display: inline-grid;
@@ -135,17 +181,17 @@
     .install.copied .copy { opacity: 0; transform: scale(0.6); }
     .install.copied .check { opacity: 1; transform: none; }
     .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-    .availability { margin: 0.9rem 0 0; color: var(--dim); font-size: 0.85rem; font-family: var(--mono); }
-    .hero .actions { margin: 1.6rem 0 0; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .availability { margin: 1rem 0 0; color: var(--dim); font-size: 0.85rem; }
 
     /* Demo: the recording plays as text, so it is sharp at any size. */
-    .demo { position: relative; margin: 3.5rem auto 0; }
+    .demo { margin: 3.5rem auto 0; max-width: 56rem; }
+    .demo .stage { position: relative; }
     .demo .screen {
       border-radius: 14px;
       overflow: hidden;
-      border: 1px solid #2c2c29;
+      border: 1px solid var(--term-line);
       background: var(--term);
-      box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 24px 60px -20px rgb(0 0 0 / 0.35);
+      box-shadow: 0 40px 120px -50px rgb(62 201 138 / 0.35), 0 30px 70px -30px var(--shade);
     }
     .demo .bar {
       position: relative;
@@ -153,23 +199,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #1f1f1d;
-      border-bottom: 1px solid #2c2c29;
-      color: #8a8a83;
+      background: var(--term-bar);
+      border-bottom: 1px solid var(--term-line);
+      color: var(--term-dim);
       font-size: 0.8rem;
     }
     .demo .lights { position: absolute; left: 1rem; display: flex; gap: 0.5rem; }
     .demo .lights span { width: 0.75rem; height: 0.75rem; border-radius: 50%; }
-    .demo .lights span:nth-child(1) { background: #ff5f57; }
-    .demo .lights span:nth-child(2) { background: #febc2e; }
-    .demo .lights span:nth-child(3) { background: #28c840; }
+    .demo .lights span:nth-child(1) { background: var(--term-dot); }
+    .demo .lights span:nth-child(2) { background: var(--term-dot); }
+    .demo .lights span:nth-child(3) { background: var(--term-dot); }
     .demo .player { padding: 0.9rem 1.2rem 0.6rem; }
     .demo .ap-wrapper, .demo .ap-player { background: transparent; }
     .demo .ap-terminal { padding: 0; border: 0; }
     .asciinema-player-theme-dwim {
       --term-color-foreground: #ecece6;
-      --term-color-background: #161615;
-      --term-color-0: #161615; --term-color-8: #8a8a83;
+      --term-color-background: #0a0a0b;
+      --term-color-0: #0a0a0b; --term-color-8: #8a8a83;
       --term-color-1: #ff5f57; --term-color-9: #ff5f57;
       --term-color-2: #3ec98a; --term-color-10: #3ec98a;
       --term-color-3: #febc2e; --term-color-11: #febc2e;
@@ -181,130 +227,271 @@
     .demo noscript img { display: block; width: 100%; height: auto; }
     .demo .mascot {
       position: absolute;
-      right: -1.5rem;
-      bottom: -2.4rem;
-      width: 128px;
-      height: 128px;
+      right: -2.6rem;
+      bottom: -1.6rem;
+      width: 120px;
+      height: 120px;
       filter: drop-shadow(0 10px 14px rgb(0 0 0 / 0.25));
       pointer-events: none;
     }
-    .demo figcaption { margin: 1.1rem 0 0; text-align: center; color: var(--dim); font-size: 0.9rem; }
+    .demo figcaption { margin: 1.2rem auto 0; max-width: 34rem; color: var(--dim); font-size: 0.88rem; text-wrap: balance; }
+    @media (max-width: 1000px) { .demo .mascot { right: -0.6rem; width: 96px; height: 96px; } }
     @media (max-width: 700px) {
       .demo .player { padding: 0.7rem 0.5rem 0.4rem; }
       .demo .ap-wrapper { display: flex; justify-content: center; }
       .demo .mascot { display: none; }
-      .demo figcaption { text-align: left; }
     }
 
-    /* Feature pairs */
-    .pairs { padding: 3rem 0 1rem; }
-    .pair {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem;
-      align-items: center;
-      padding: 2.5rem 0;
+    /* Warning */
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      margin: 2.5rem auto 0;
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
+      background: color-mix(in srgb, var(--warn) 7%, transparent);
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.55;
+      text-align: left;
     }
-    .pair:nth-child(even) .text { order: 2; }
-    .pair h2 {
-      font-size: clamp(1.6rem, 3vw, 2.1rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
+    .notice svg { flex: none; width: 1.25rem; height: 1.25rem; margin-top: 0.12rem; fill: none; stroke: var(--warn); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .notice p { margin: 0; }
+    .notice strong { color: var(--warn); font-weight: 600; }
+
+    /* Sections */
+    .section { padding: 5.5rem 0 0; }
+    .section-head { max-width: 40rem; margin: 0 auto 2.8rem; text-align: center; }
+    .section-head h2 {
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      margin: 0 0 0.7rem;
+    }
+    .section-head p { margin: 0; color: var(--muted); font-size: 1.1rem; text-wrap: balance; }
+    .tag {
+      display: inline-block;
+      margin: 0 0 1.1rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 8px;
+      background: rgb(var(--tint) / 0.04);
+      border: 1px solid var(--line-2);
+      color: var(--muted);
+      font: 500 0.76rem var(--mono);
+      letter-spacing: 0.02em;
+    }
+
+    /* Integrations: a logo wall */
+    .logos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(13rem, 17rem));
+      justify-content: center;
+      gap: 1rem;
+    }
+    .logos .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      height: 6rem;
+      border-radius: 16px;
+      border: 1px solid var(--line-2);
+      background: var(--card);
+      color: var(--fg);
+      font-size: 1.4rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      transition: border-color 120ms, box-shadow 120ms;
+    }
+    .logos .logo:hover { border-color: var(--line-3); background: var(--card-hover); }
+    .logos .logo svg { width: 2rem; height: 2rem; fill: currentColor; }
+
+    /* Chapters: a label, a headline, a sentence, a visual, three points */
+    .chapters { padding: 5.5rem 0 0; display: grid; gap: 1.25rem; }
+    .chapter {
+      padding: 3.2rem 3.2rem 3rem;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+    .chapter h2 {
+      font-size: clamp(1.8rem, 3.8vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
       margin: 0 0 0.9rem;
     }
-    .pair p { margin: 0 0 0.9rem; color: var(--muted); }
-    .pair p:last-child { margin-bottom: 0; }
-    .pair p strong { color: var(--fg); font-weight: 500; }
-    .pair .text code { font-size: 0.88em; color: var(--fg); white-space: nowrap; }
+    .chapter .sub { margin: 0; max-width: 44rem; text-wrap: balance; color: var(--muted); font-size: 1.12rem; line-height: 1.5; }
+    .chapter .sub a { color: var(--fg); }
+    .sub code, .section-head code, .cta code { font-size: 0.9em; color: var(--fg); }
+    .sub code, .section-head code, .points code, .cta p code { white-space: nowrap; }
+    .cap.lit { text-transform: none; letter-spacing: 0; font-size: 0.78rem; }
+    .chapter .visual {
+      margin: 2.4rem 0;
+      padding: 2.4rem;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: radial-gradient(rgb(var(--tint) / 0.08) 1px, transparent 1px) 0 0 / 18px 18px, var(--bg);
+    }
+    .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem 2.4rem; }
+    .points svg { display: block; width: 1.35rem; height: 1.35rem; margin: 0 0 0.7rem; fill: none; stroke: var(--muted); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .points h3 { margin: 0 0 0.25rem; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+    .points p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+    .points code { font-size: 0.9em; color: var(--fg); }
     @media (max-width: 800px) {
-      .pair { grid-template-columns: 1fr; gap: 1.6rem; padding: 2rem 0; }
-      .pair:nth-child(even) .text { order: 0; }
+      .chapter { padding: 2rem 1.4rem; border-radius: 18px; }
+      .chapter h2 br { display: none; }
+      .chapter .visual { margin: 1.8rem 0; padding: 1.1rem; }
+      .points { grid-template-columns: 1fr; }
     }
 
-    /* Terminal snippets and cards */
+    /* A terminal window */
+    .window {
+      max-width: 44rem;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--term-line);
+      background: var(--term);
+      box-shadow: 0 24px 50px -24px var(--shade);
+    }
+    .window .bar {
+      position: relative;
+      height: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--term-bar);
+      border-bottom: 1px solid var(--term-line);
+      color: var(--term-dim);
+      font-size: 0.78rem;
+    }
+    .window .lights { position: absolute; left: 0.9rem; display: flex; gap: 0.45rem; }
+    .window .lights span { width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--term-dot); }
     .term {
       margin: 0;
-      padding: 1.1rem 1.3rem 1.2rem;
-      border-radius: 12px;
-      background: var(--term);
-      border: 1px solid var(--line-2);
-      overflow-x: auto;
-      color: #ecece6;
-      font: clamp(12px, 2.8vw, 14px)/1.7 var(--mono);
-      white-space: pre;
+      padding: 1.1rem 1.3rem 1.3rem;
+      color: var(--term-fg);
+      font: clamp(11.5px, 2.6vw, 14px)/1.85 var(--mono);
+      white-space: pre-wrap;
     }
-    .term.wrap-lines { white-space: pre-wrap; }
-    .term .c { color: var(--dim); }
-    .term .p { color: var(--accent); font-weight: 700; user-select: none; }
-    .term .b { font-weight: 700; }
-    .term .g { color: var(--muted); }
-    .card {
-      border-radius: 12px;
-      background: var(--card);
-      border: 1px solid var(--line-2);
-      padding: 1.3rem 1.4rem;
-    }
-    /* The model card */
-    .model {
-      border-radius: 14px;
-      background: var(--card);
-      border: 1px solid var(--line-2);
-      padding: 1.3rem 1.4rem 1.4rem;
-      box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 16px 40px -24px rgb(0 0 0 / 0.3);
-    }
-    .model-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-    .model-eyebrow { display: block; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
-    .model-name { display: block; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin: 0.15rem 0 0.1rem; }
-    .model-by { color: var(--muted); font-size: 0.92rem; }
-    .model-badge {
-      flex: none;
-      margin-top: 0.3rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      background: #e6f7ee;
-      color: var(--accent-ink);
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-    .model-spec { margin: 1.1rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1.4rem; font-size: 0.95rem; }
-    .model-spec dt { color: var(--muted); }
-    .model-spec dd { margin: 0; font-family: var(--mono); font-size: 0.88rem; }
-    .model-size { margin: 1.2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--line); display: grid; gap: 0.5rem; }
-    .model-size .row { display: grid; grid-template-columns: 14ch 1fr 6ch; align-items: center; gap: 0.7rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
-    .model-size .row span:last-child { text-align: right; color: var(--fg); }
-    .model-size .bar { height: 0.6rem; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
-    .model-size .bar b { display: block; height: 100%; border-radius: 999px; background: var(--line-2); }
-    .model-size .bar b.on { background: var(--accent); }
-    .card h3 { margin: 0 0 0.6rem; font-size: 1.05rem; font-weight: 700; }
-    .card ul { margin: 0; padding-left: 1.2rem; color: var(--muted); }
-    .card li { margin: 0.3rem 0; }
-    .card li strong { color: var(--fg); font-weight: 500; }
-    .card.warn { border-color: #e8b53a; background: #fff8e6; }
-    .notice { margin: 2.5rem auto 0; text-align: left; }
-    .notice p { margin: 0; color: var(--muted); }
-    .card.warn h3 { color: #8a5a00; }
+    .term .p { color: var(--accent); font-weight: 600; user-select: none; }
 
-    /* Final CTA */
-    .cta { margin: 4rem auto 0; padding: 3.5rem 1.5rem; text-align: center; border-top: 1px solid var(--line); }
-    .cta h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -0.03em; margin: 0 0 0.6rem; }
-    .cta p { color: var(--muted); margin: 0 0 1.6rem; }
-    .cta .actions { margin: 1.4rem 0 0; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    /* Diagrams, drawn with boxes */
+    .diagram { display: flex; align-items: center; justify-content: center; }
+    .box {
+      padding: 1.1rem 1.2rem 1.2rem;
+      border-radius: 14px;
+      border: 1px dashed var(--line-2);
+      background: var(--bg);
+    }
+    .box.solid { border: 1px solid rgb(62 201 138 / 0.4); background: var(--card); box-shadow: 0 20px 50px -26px rgb(62 201 138 / 0.4); }
+    .cap { display: block; margin: 0 0 0.75rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+    .box.solid .cap { color: var(--accent-ink); }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .chips span, .sessions span {
+      padding: 0.4rem 0.8rem;
+      border-radius: 9px;
+      border: 1px solid var(--line-2);
+      background: rgb(var(--tint) / 0.03);
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .box:not(.solid) .chips span { border-style: dashed; background: transparent; color: var(--muted); }
+    .wire { position: relative; flex: 0 1 7rem; min-width: 2.5rem; height: 0; border-top: 1px solid var(--line-2); }
+    .wire.dashed { flex-basis: 10rem; border-top-style: dashed; }
+    .wire span { position: absolute; left: 50%; bottom: 0.45rem; transform: translateX(-50%); color: var(--dim); font-size: 0.78rem; white-space: nowrap; }
+    .sessions { display: grid; gap: 0.5rem; }
+    .sessions span { background: var(--term); border-color: var(--term-line); color: var(--term-fg); font: 0.85rem var(--mono); }
+    .sessions span b { color: var(--accent); }
+    .sessions span.more { background: transparent; border: 1px dashed var(--line-2); color: var(--dim); }
+    @media (max-width: 800px) {
+      .diagram { flex-direction: column; align-items: stretch; }
+      .wire, .wire.dashed { flex: none; width: 0; height: 2.6rem; margin: 0 auto; border-top: 0; border-left: 1px solid var(--line-2); }
+      .wire.dashed { border-left-style: dashed; }
+      .wire span { left: 0.7rem; bottom: auto; top: 50%; transform: translateY(-50%); }
+      .chips span { white-space: normal; }
+    }
+
+    /* Tables, set in the terminal's type */
+    .scroll { overflow-x: auto; }
+    .chapters > *, .points > *, .models > *, .chapter .visual { min-width: 0; }
+    .chapter .visual .tbl { min-width: 38rem; }
+    .tbl { width: 100%; border-collapse: collapse; font: 0.86rem/1.5 var(--mono); text-align: left; }
+    .tbl th { padding: 0 1.2rem 0.7rem 0; color: var(--dim); font-weight: 400; white-space: nowrap; }
+    .tbl td { padding: 0.7rem 1.2rem 0.7rem 0; border-top: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+    .tbl td:first-child { color: var(--fg); white-space: nowrap; }
+    .tbl td:last-child, .tbl th:last-child { padding-right: 0; }
+    .tbl code { color: var(--fg); }
+
+    /* The two models, side by side */
+    .models { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .models .box { padding: 1.3rem 1.4rem; }
+    .models strong { display: block; margin: 0 0 0.9rem; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
+    .models strong a { text-decoration: none; }
+    .models dl { margin: 0; font-size: 0.92rem; }
+    .models dl div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.8rem; padding: 0.55rem 0; border-top: 1px solid var(--line); }
+    .models dl div:last-child { padding-bottom: 0; }
+    .models dt { color: var(--dim); }
+    .models dd { margin: 0; color: var(--muted); }
+    .models dd a { color: var(--fg); }
+    @media (max-width: 800px) { .models { grid-template-columns: 1fr; } }
+
+    /* Final CTA: no box, a lit hairline above a headline */
+    .cta {
+      position: relative;
+      margin: 6rem auto 0;
+      padding: 6.5rem 0 5.5rem;
+      text-align: center;
+      background: radial-gradient(36rem 14rem at 50% 0, rgb(62 201 138 / 0.1), transparent 70%);
+    }
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line-2) 20%, rgb(62 201 138 / 0.7) 50%, var(--line-2) 80%, transparent);
+    }
+    .cta h2 {
+      font-size: clamp(2.4rem, 5.6vw, 4rem);
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      line-height: 1.05;
+      margin: 0 0 1rem;
+      padding-bottom: 0.08em;
+      background: linear-gradient(180deg, var(--head-a) 35%, var(--head-b));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .cta p { color: var(--muted); margin: 0 0 2.2rem; font-size: 1.15rem; }
+
     footer {
-      padding: 1.5rem 0 3rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.6rem;
+      padding: 2rem 0 3rem;
       color: var(--dim);
       font-size: 0.88rem;
-      text-align: center;
     }
-    footer a { color: var(--muted); }
+    footer nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--fg); }
   </style>
 </head>
 <body>
   <header class="wrap">
     <nav class="nav" aria-label="Primary">
-      <a class="brand" href="/">dwim</a>
+      <a class="brand" href="/"><img src="hero.png" alt="">dwim</a>
       <div class="nav-links">
+        <a class="section-link" href="#features">Features</a>
+        <a class="section-link" href="#integrations">Integrations</a>
         <a href="https://github.com/dwim-sh/dwim">GitHub</a>
         <a class="button primary" href="#install">Install</a>
       </div>
@@ -314,139 +501,252 @@
   <main>
     <section class="hero wrap">
       <h1>A coding agent<br><em>you control.</em></h1>
-      <p class="lede">dwim is an AI coding agent that runs on your own GPU. Give it a task and it reads your code, edits files, and runs commands.<br><br>Open source. No account, no API key, no token bill.</p>
-      <button class="install" type="button" aria-label="Copy the install command" data-command="curl -fsSL https://dwim.sh/install.sh | sh">
-        <span class="p" aria-hidden="true">$</span>
-        <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
-        <span class="icon" aria-hidden="true">
-          <svg class="copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-1a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg>
-          <svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>
-        </span>
-        <span class="visually-hidden" role="status"></span>
-      </button>
-      <p class="availability">macOS on Apple silicon &middot; Linux with a Vulkan GPU &middot; MIT</p>
+      <p class="lede">A coding agent for your terminal: the agent, the model, and the inference engine that runs it, in one Rust program. Local by default.</p>
+      <div class="hero-actions">
+        <button class="install" type="button" aria-label="Copy the install command" data-command="curl -fsSL https://dwim.sh/install.sh | sh">
+          <span class="p" aria-hidden="true">$</span>
+          <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
+          <span class="icon" aria-hidden="true">
+            <svg class="copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-1a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg>
+            <svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>
+          </span>
+          <span class="visually-hidden" role="status"></span>
+        </button>
+      </div>
+      <p class="availability">macOS on Apple silicon &middot; Linux with Vulkan 1.1 &middot; MIT</p>
 
       <figure class="demo">
-        <div class="screen">
-          <div class="bar"><div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>~/src/penberg/dwim</div>
-          <div class="player" id="player" aria-label="A dwim session: the user types Hello!, the model thinks, and replies that it is in the dwim project and asks what to work on">
-            <noscript><img src="demo.gif" width="720" height="426" alt=""></noscript>
+        <div class="stage">
+          <div class="screen">
+            <div class="bar"><div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>~/src/penberg/dwim</div>
+            <div class="player" id="player" aria-label="A dwim session: the user types Hello!, the model thinks, and replies that it is in the dwim project and asks what to work on">
+              <noscript><img src="demo.gif" width="720" height="426" alt=""></noscript>
+            </div>
           </div>
+          <img class="mascot" src="hero.png" alt="">
         </div>
-        <img class="mascot" src="hero.png" alt="">
         <figcaption>Recorded on a MacBook Pro with an Apple M5 and 32 GB of memory, played back at the speed it ran.</figcaption>
       </figure>
 
-      <div class="card warn notice">
-        <h3>Warning</h3>
-        <p>dwim is experimental software. Expect bugs, rough edges, and changes that break things from one commit to the next. The model runs shell commands on your machine without asking first, and dwim does not sandbox them, so run it in a container or a virtual machine, on code you have committed or backed up.</p>
+      <div class="notice">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.2 2.6 16h14.8L10 3.2zM10 8.4v3.6M10 14.1v.1"/></svg>
+        <p><strong>dwim is experimental software.</strong> Expect bugs, rough edges, and changes that break things from one commit to the next. The model runs shell commands on your machine without asking first, and dwim does not sandbox them, so run it in a container or a virtual machine, on code you have committed or backed up.</p>
       </div>
     </section>
 
-    <section class="pairs wrap">
-      <div class="pair">
-        <div class="text">
-          <h2>An interactive shell. A scriptable tool.</h2>
-          <p>Run dwim to open an interactive shell and work through a task with the agent.</p>
-          <p>Or pass a prompt on the command line. dwim prints only the reply to standard output, so you can redirect it or call it from your scripts.</p>
+    <section class="chapters wrap" id="features">
+      <article class="chapter">
+        <span class="tag">Interface</span>
+        <h2>An interactive shell. <br>A scriptable tool.</h2>
+        <p class="sub">With no arguments, <code>dwim</code> starts an interactive session in the current directory. Given a prompt, it answers and exits.</p>
+        <div class="visual">
+          <div class="window">
+            <div class="bar"><div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>~/src/project</div>
+<pre class="term"><code><span class="p">$ </span>dwim
+<span class="p">$ </span>dwim "Explain the locking assumptions in this module." &gt; locking.md
+<span class="p">$ </span>dwim --stats "Add a regression test for this failing case."
+<span class="p">$ </span>dwim --shell ./in-container "Find the allocation hot spots."</code></pre>
+          </div>
         </div>
-<pre class="term wrap-lines"><code><span class="p">$ </span>dwim
-<span class="p">$ </span>dwim "Explain the locking assumptions in this module."
-<span class="p">$ </span>dwim "Add a regression test for this failing case."
-<span class="p">$ </span>dwim "Find the allocation hot spots in this benchmark."</code></pre>
-      </div>
+        <div class="points">
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+            <h3>The reply is standard output</h3>
+            <p>Nothing else is written there. Progress, the model's thinking, the commands it runs and their output go to standard error. Exit status is 0 or 1.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-5-6-5M12 19h8"/></svg>
+            <h3>Six tools</h3>
+            <p><code>bash</code>, <code>read</code>, <code>write</code>, <code>edit</code>, <code>glob</code> and <code>grep</code>. Commands run as <code>sh -c</code>, or as <code>program -c</code> with <code>--shell</code>, to run them in a container.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8"/></svg>
+            <h3>AGENTS.md</h3>
+            <p>If the working directory has one, its contents are given to the agent as project instructions.</p>
+          </div>
+        </div>
+      </article>
 
-      <div class="pair">
-        <div class="text">
-          <h2>Load the model once. Run several sessions.</h2>
-          <p>The first dwim you run starts a local server in the background that loads the model. Every dwim after it connects to that server and is ready in a moment, instead of loading 16 GB again.</p>
-          <p>Sessions share the weights, and each keeps its own context, so you can work in two terminals at once. Type <code>/server</code> in the shell to see it, stop it, or restart it.</p>
-        </div>
-        <div class="card">
-          <h3>The dwim server</h3>
-          <ul>
-            <li>Starts on its own the first time you run dwim</li>
-            <li>Shares the weights, with a context for each session</li>
-            <li>Has room for <strong>two sessions</strong> by default; <code>--sessions</code> sets how many</li>
-            <li>Listens on a Unix socket, not the network</li>
-            <li>Exits after ten minutes without a session</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pair">
-        <div class="text">
-          <h2>Nothing leaves your machine unless you want it to.</h2>
-          <p>Your code and prompts stay local. Work on a plane or on code you can't upload. Once the model is downloaded, dwim works offline.</p>
-          <p>Run it as often as you need without watching a token budget.</p>
-        </div>
-        <div class="card">
-          <h3>What you don't need</h3>
-          <ul>
-            <li>An account</li>
-            <li>An API key</li>
-            <li>A token budget</li>
-            <li>A network connection, once the model is downloaded</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pair">
-        <div class="text">
-          <h2>A powerful model. On your own machine.</h2>
-          <p><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B</a> reads files, runs tools, and follows your project's <code>AGENTS.md</code>. dwim runs it at four bits, where its 27 billion parameters take 16 GB instead of 54.</p>
-          <p>It decodes several tokens at a time: a drafter the model ships guesses the next few, and the model checks them all in one pass.</p>
-        </div>
-        <div class="model" aria-label="Model card">
-          <div class="model-head">
-            <div>
-              <span class="model-eyebrow">The model</span>
-              <strong class="model-name">Qwen3.8-27B</strong>
-              <span class="model-by">by <a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen</a></span>
+      <article class="chapter">
+        <span class="tag">Local by default</span>
+        <h2>Nothing leaves the machine <br>unless you decide so.</h2>
+        <p class="sub">By default, the model runs in a process on your machine, and a session reaches it over a Unix socket.</p>
+        <div class="visual">
+          <div class="diagram">
+            <div class="box solid">
+              <span class="cap">Your machine</span>
+              <div class="chips"><span>$PWD</span><span>dwim</span><span>Qwen3.8-27B</span><span>GPU</span></div>
             </div>
-            <span class="model-badge">16 GB</span>
-          </div>
-          <dl class="model-spec">
-            <dt>Parameters</dt><dd>27 billion</dd>
-            <dt>Weights</dt><dd>4-bit <a href="https://huggingface.co/bartowski/Qwen3.8-27B-GGUF">GGUF</a></dd>
-          </dl>
-          <div class="model-size">
-            <div class="row"><span>Full precision</span><div class="bar"><b style="width:100%"></b></div><span>54 GB</span></div>
-            <div class="row"><span>Four bits</span><div class="bar"><b class="on" style="width:30%"></b></div><span>16 GB</span></div>
+            <div class="wire dashed"><span>only if you ask</span></div>
+            <div class="box">
+              <span class="cap">Optional</span>
+              <div class="chips"><span>--provider openrouter</span></div>
+            </div>
           </div>
         </div>
-      </div>
+        <div class="points">
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            <h3>No account, no API key by default</h3>
+            <p>Install it and run it. Only a session at a provider needs a key, in <code>OPENROUTER_API_KEY</code>.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+            <h3>No token bill by default</h3>
+            <p>A local session costs nothing per token. A session at OpenRouter sends the conversation there, and each request is charged for.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 20h.01M3 3l18 18"/></svg>
+            <h3>Offline once downloaded</h3>
+            <p>The weights are fetched once, at a pinned revision. With <code>HF_HUB_OFFLINE=1</code>, a model that is not in the cache is an error, not a download.</p>
+          </div>
+        </div>
+      </article>
 
-      <div class="pair">
-        <div class="text">
-          <h2>Does it run on my machine?</h2>
-          <p>Yes, if it has the memory. The weights take 16 GB and the sessions' conversations share the rest, so dwim wants a Mac with 32 GiB or a Linux GPU with 24 GB of VRAM. It refuses to start on a Mac with less.</p>
-          <p>You can even run it on the CPU, slowly.</p>
+      <article class="chapter">
+        <span class="tag">Models</span>
+        <h2>On your GPU, <br>or in the cloud.</h2>
+        <p class="sub">Two models of one family, with one chat format and one way of calling tools. <code>/model</code> moves a session from one to the other, and the conversation goes with it.</p>
+        <div class="visual">
+          <div class="models">
+            <div class="box solid">
+              <span class="cap lit">--model medium (default)</span>
+              <strong><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B</a></strong>
+              <dl>
+                <div><dt>Parameters</dt><dd>27 billion</dd></div>
+                <div><dt>Weights</dt><dd>16 GB, a Q4_0 <a href="https://huggingface.co/bartowski/Qwen3.8-27B-GGUF">GGUF</a></dd></div>
+                <div><dt>Runs</dt><dd>On your machine, or at OpenRouter</dd></div>
+              </dl>
+            </div>
+            <div class="box">
+              <span class="cap lit">--model large</span>
+              <strong>Qwen3.8-2.4T-A95B</strong>
+              <dl>
+                <div><dt>Parameters</dt><dd>2.4 trillion, 95 billion active for a token</dd></div>
+                <div><dt>Weights</dt><dd>The open weights of Qwen3.8 Max</dd></div>
+                <div><dt>Runs</dt><dd>At OpenRouter only</dd></div>
+              </dl>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <h3>Requirements</h3>
-          <ul>
-            <li><strong>Apple silicon:</strong> 32 GiB of memory</li>
-            <li><strong>Linux:</strong> Vulkan GPU, 24 GB of VRAM</li>
-            <li><strong>Disk space:</strong> 16 GB</li>
-          </ul>
+        <div class="points">
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <h3>Speculative decoding</h3>
+            <p>On your machine, a drafter in the model file proposes the next tokens, and the model verifies them in one pass. <code>--speculate n</code> sets how many: 4 by default, 0 for one at a time.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9v6M11 9v6M15 9v6"/></svg>
+            <h3>Context</h3>
+            <p>Locally, a session gets as many tokens as fit in the device's free memory beside the model, and no fewer than 16384. At OpenRouter, 131072. <code>--context</code> overrides.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            <h3>Compaction</h3>
+            <p>At four fifths of the window, the agent writes itself a note of the task and starts over from the system prompt with the note and the most recent exchanges.</p>
+          </div>
         </div>
+      </article>
+
+      <article class="chapter">
+        <span class="tag">Engine</span>
+        <h2>Its own inference engine, <br>in Rust.</h2>
+        <p class="sub">The GGUF reader, the tokenizer, the transformer and the GPU kernels are part of dwim. There is no Python and no separate runtime to install.</p>
+        <div class="visual">
+          <div class="scroll">
+            <table class="tbl">
+              <thead><tr><th>--device</th><th>Backend</th><th>Kernels</th></tr></thead>
+              <tbody>
+                <tr><td>gpu</td><td>Metal, on Apple silicon</td><td>MSL</td></tr>
+                <tr><td>gpu</td><td>Vulkan 1.1 with VK_KHR_push_descriptor</td><td>WGSL, compiled to SPIR-V at build time</td></tr>
+                <tr><td>cpu</td><td>The reference implementation</td><td>Rust</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="points">
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+            <h3>What it needs</h3>
+            <p>A Mac with 32 GiB of memory, or a Linux GPU with 24 GB of VRAM, and 16 GB of disk. The CPU works too, slowly.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+            <h3>Measure it yourself</h3>
+            <p><code>dwim --bench</code> prints tokens per second for reading and for generating, at 1k, 8k, 32k, 64k and 128k tokens of context.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <h3>The system prompt is read once</h3>
+            <p>The model's state after the system prompt is saved under <code>~/.cache/dwim/states/</code> and taken up by later runs in place of reading it again.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter">
+        <span class="tag">Server</span>
+        <h2>One process has the weights. <br>Sessions are its clients.</h2>
+        <p class="sub">A session connects to the socket, and starts <code>dwim --serve</code>, detached, when nothing answers. The server exits after ten minutes without a session.</p>
+        <div class="visual">
+          <div class="diagram">
+            <div class="sessions">
+              <span><b>$</b> dwim</span>
+              <span><b>$</b> dwim</span>
+              <span class="more">--sessions n</span>
+            </div>
+            <div class="wire"><span>AF_UNIX</span></div>
+            <div class="box solid">
+              <span class="cap lit">dwim --serve</span>
+              <div class="chips"><span>The weights, loaded once</span><span>A key/value cache for each session</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="points">
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l10 5-10 5L2 7l10-5zM2 12l10 5 10-5M2 17l10 5 10-5"/></svg>
+            <h3>State for each session</h3>
+            <p>The weights are shared. Each session has its own key/value caches and recurrent states on the device, allocated when the server starts. <code>--sessions</code> sets how many: 2 by default.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></svg>
+            <h3>Sessions take turns</h3>
+            <p>The model answers one reply at a time. A session whose turn it is not waits, and says so. One beyond the limit is refused until another ends.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M6.3 7.3a8 8 0 1 0 11.4 0"/></svg>
+            <h3>Yours to supervise</h3>
+            <p><code>dwim --serve</code> runs in the foreground, for a service manager. <code>/server</code> in the shell shows it, stops it, or restarts it.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section wrap" id="integrations">
+      <div class="section-head">
+        <h2>Integrations</h2>
+        <p>Run a session at a provider instead of on your machine. <code>/model</code> picks where the model runs, and <code>/provider</code> shows it.</p>
+      </div>
+      <div class="logos">
+        <a class="logo" href="https://openrouter.ai/" aria-label="OpenRouter">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.778 1.844v1.919q-.569-.026-1.138-.032-.708-.008-1.415.037c-1.93.126-4.023.728-6.149 2.237-2.911 2.066-2.731 1.95-4.14 2.75-.396.223-1.342.574-2.185.798-.841.225-1.753.333-1.751.333v4.229s.768.108 1.61.333c.842.224 1.789.575 2.185.799 1.41.798 1.228.683 4.14 2.75 2.126 1.509 4.22 2.11 6.148 2.236.88.058 1.716.041 2.555.005v1.918l7.222-4.168-7.222-4.17v2.176c-.86.038-1.611.065-2.278.021-1.364-.09-2.417-.357-3.979-1.465-2.244-1.593-2.866-2.027-3.68-2.508.889-.518 1.449-.906 3.822-2.59 1.56-1.109 2.614-1.377 3.978-1.466.667-.044 1.418-.017 2.278.02v2.176L24 6.014Z"/></svg>
+          OpenRouter
+        </a>
       </div>
     </section>
 
     <section class="cta wrap" id="install">
-      <h2>Try it out on your machine.</h2>
-      <p>Install dwim, open a repository, and give it a task.</p>
-      <button class="install" type="button" aria-label="Copy the install command" data-command="curl -fsSL https://dwim.sh/install.sh | sh">
-        <span class="p" aria-hidden="true">$</span>
-        <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
-        <span class="icon" aria-hidden="true">
-          <svg class="copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-1a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg>
-          <svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>
-        </span>
-        <span class="visually-hidden" role="status"></span>
-      </button>
-      <div class="actions">
+      <h2>Try it out now</h2>
+      <p>Install it, <code>cd</code> into a repository, and run <code>dwim</code>.</p>
+      <div class="hero-actions">
+        <button class="install" type="button" aria-label="Copy the install command" data-command="curl -fsSL https://dwim.sh/install.sh | sh">
+          <span class="p" aria-hidden="true">$</span>
+          <code>curl -fsSL https://dwim.sh/install.sh | sh</code>
+          <span class="icon" aria-hidden="true">
+            <svg class="copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-1a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg>
+            <svg class="check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>
+          </span>
+          <span class="visually-hidden" role="status"></span>
+        </button>
         <a class="button" href="https://github.com/dwim-sh/dwim">
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
           Source on GitHub
@@ -456,7 +756,12 @@
   </main>
 
   <footer class="wrap">
-    dwim: do what I mean &middot; MIT licensed &middot; <a href="https://github.com/dwim-sh/dwim">github.com/dwim-sh/dwim</a> &middot; model by <a href="https://huggingface.co/Qwen">Qwen</a>
+    <span>dwim: do what I mean</span>
+    <nav aria-label="Footer">
+      <a href="https://github.com/dwim-sh/dwim">GitHub</a>
+      <a href="https://github.com/dwim-sh/dwim/blob/main/LICENSE.md">MIT licensed</a>
+      <a href="https://huggingface.co/Qwen">Model by Qwen</a>
+    </nav>
   </footer>
 
   <script src="vendor/asciinema-player.js"></script>
