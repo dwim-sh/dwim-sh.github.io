@@ -314,16 +314,24 @@
     .logos .logo svg { width: 1.4rem; height: 1.4rem; flex: none; fill: currentColor; }
     @media (max-width: 700px) { .logos { grid-template-columns: repeat(2, minmax(0, 12.5rem)); } }
 
-    /* Chapters: a label, a headline, a sentence, a visual, three points */
+    /* Chapters: a label, a headline, a sentence, a visual */
     .chapters { padding: 5.5rem 0 0; display: grid; gap: 1.25rem; }
     .chapter {
-      padding: 3.2rem 3.2rem 3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      grid-template-rows: 1fr auto auto auto 1fr;
+      column-gap: 3.2rem;
+      padding: 3.2rem;
       border-radius: 24px;
       border: 1px solid var(--line);
       background: var(--card);
     }
+    .chapter .tag { grid-area: 2 / 1; justify-self: start; }
+    .chapter h2 { grid-area: 3 / 1; }
+    .chapter .sub { grid-area: 4 / 1; }
+    .chapter .visual { grid-area: 1 / 2 / 6 / 3; align-self: center; }
     .chapter h2 {
-      font-size: clamp(1.8rem, 3.8vw, 2.6rem);
+      font-size: clamp(1.8rem, 3.4vw, 2.3rem);
       font-weight: 600;
       letter-spacing: -0.035em;
       line-height: 1.1;
@@ -332,31 +340,21 @@
     .chapter .sub { margin: 0; max-width: 44rem; text-wrap: balance; color: var(--muted); font-size: 1.12rem; line-height: 1.5; }
     .chapter .sub a { color: var(--fg); }
     .sub code, .section-head code, .cta code { font-size: 0.9em; color: var(--fg); }
-    .sub code, .section-head code, .points code, .cta p code { white-space: nowrap; }
-    .cap.lit { text-transform: none; letter-spacing: 0; font-size: 0.78rem; }
+    .sub code, .section-head code, .cta p code { white-space: nowrap; }
     .chapter .visual {
-      margin: 2.4rem 0;
-      padding: 2.4rem;
+      padding: 1.6rem;
       border-radius: 16px;
       border: 1px solid var(--line);
       background: radial-gradient(rgb(var(--tint) / 0.08) 1px, transparent 1px) 0 0 / 18px 18px, var(--bg);
     }
-    .points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem 2.4rem; }
-    .points svg { display: block; width: 1.35rem; height: 1.35rem; margin: 0 0 0.7rem; fill: none; stroke: var(--muted); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-    .points h3 { margin: 0 0 0.25rem; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
-    .points p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
-    .points code { font-size: 0.9em; color: var(--fg); }
-    @media (max-width: 800px) {
-      .chapter { padding: 2rem 1.4rem; border-radius: 18px; }
+    @media (max-width: 900px) {
+      .chapter { display: block; padding: 2rem 1.4rem; border-radius: 18px; }
       .chapter h2 br { display: none; }
-      .chapter .visual { margin: 1.8rem 0; padding: 1.1rem; }
-      .points { grid-template-columns: 1fr; }
+      .chapter .visual { margin: 1.8rem 0 0; padding: 1.1rem; }
     }
 
     /* A terminal window */
     .window {
-      max-width: 44rem;
-      margin: 0 auto;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--term-line);
@@ -380,15 +378,15 @@
       margin: 0;
       padding: 1.1rem 1.3rem 1.3rem;
       color: var(--term-fg);
-      font: clamp(11.5px, 2.6vw, 14px)/1.85 var(--mono);
+      font: clamp(11.5px, 2.6vw, 13px)/1.85 var(--mono);
       white-space: pre-wrap;
     }
     .term .p { color: var(--accent); font-weight: 600; user-select: none; }
 
-    /* Diagrams, drawn with boxes */
-    .diagram { display: flex; align-items: center; justify-content: center; }
+    /* Diagrams: boxes stacked, joined by a wire */
+    .diagram { display: flex; flex-direction: column; align-items: stretch; min-width: 0; }
     .box {
-      padding: 1.1rem 1.2rem 1.2rem;
+      padding: 1.2rem 1.3rem 1.3rem;
       border-radius: 14px;
       border: 1px dashed var(--line-2);
       background: var(--bg);
@@ -397,53 +395,23 @@
     .cap { display: block; margin: 0 0 0.75rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
     .box.solid .cap { color: var(--accent-ink); }
     .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .chips span, .sessions span {
-      padding: 0.4rem 0.8rem;
+    .chips span {
+      padding: 0.4rem 0.65rem;
       border-radius: 9px;
       border: 1px solid var(--line-2);
       background: rgb(var(--tint) / 0.03);
-      font-size: 0.92rem;
-      white-space: nowrap;
+      font-size: 0.86rem;
     }
+    .chips.even span { flex: 1 1 0; padding: 0.6rem 0.65rem; text-align: center; font-size: 0.95rem; }
     .box:not(.solid) .chips span { border-style: dashed; background: transparent; color: var(--muted); }
-    .wire { position: relative; flex: 0 1 7rem; min-width: 2.5rem; height: 0; border-top: 1px solid var(--line-2); }
-    .wire.dashed { flex-basis: 10rem; border-top-style: dashed; }
-    .wire span { position: absolute; left: 50%; bottom: 0.45rem; transform: translateX(-50%); color: var(--dim); font-size: 0.78rem; white-space: nowrap; }
-    .sessions { display: grid; gap: 0.5rem; }
-    .sessions span { background: var(--term); border-color: var(--term-line); color: var(--term-fg); font: 0.85rem var(--mono); }
-    .sessions span b { color: var(--accent); }
-    .sessions span.more { background: transparent; border: 1px dashed var(--line-2); color: var(--dim); }
-    @media (max-width: 800px) {
-      .diagram { flex-direction: column; align-items: stretch; }
-      .wire, .wire.dashed { flex: none; width: 0; height: 2.6rem; margin: 0 auto; border-top: 0; border-left: 1px solid var(--line-2); }
-      .wire.dashed { border-left-style: dashed; }
-      .wire span { left: 0.7rem; bottom: auto; top: 50%; transform: translateY(-50%); }
-      .chips span { white-space: normal; }
-    }
+    .wire { position: relative; width: 0; height: 2.6rem; margin: 0 auto; border-left: 1px solid var(--line-2); }
+    .wire.dashed { border-left-style: dashed; }
+    .wire span { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); color: var(--dim); font-size: 0.78rem; white-space: nowrap; }
 
-    /* Tables, set in the terminal's type */
-    .scroll { overflow-x: auto; }
-    .chapters > *, .points > *, .models > *, .chapter .visual { min-width: 0; }
-    .chapter .visual .tbl { min-width: 38rem; }
-    .tbl { width: 100%; border-collapse: collapse; font: 0.86rem/1.5 var(--mono); text-align: left; }
-    .tbl th { padding: 0 1.2rem 0.7rem 0; color: var(--dim); font-weight: 400; white-space: nowrap; }
-    .tbl td { padding: 0.7rem 1.2rem 0.7rem 0; border-top: 1px solid var(--line); color: var(--muted); vertical-align: top; }
-    .tbl td:first-child { color: var(--fg); white-space: nowrap; }
-    .tbl td:last-child, .tbl th:last-child { padding-right: 0; }
-    .tbl code { color: var(--fg); }
-
-    /* The two models, side by side */
-    .models { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .models .box { padding: 1.3rem 1.4rem; }
-    .models strong { display: block; margin: 0 0 0.9rem; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
+    /* The two models, local and cloud */
+    .models strong { display: block; margin: 0 0 0.35rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; }
     .models strong a { text-decoration: none; }
-    .models dl { margin: 0; font-size: 0.92rem; }
-    .models dl div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 0.8rem; padding: 0.55rem 0; border-top: 1px solid var(--line); }
-    .models dl div:last-child { padding-bottom: 0; }
-    .models dt { color: var(--dim); }
-    .models dd { margin: 0; color: var(--muted); }
-    .models dd a { color: var(--fg); }
-    @media (max-width: 800px) { .models { grid-template-columns: 1fr; } }
+    .models p { margin: 0; color: var(--muted); font-size: 0.98rem; }
 
     /* Final CTA: no box, a lit hairline above a headline */
     .cta {
@@ -540,6 +508,27 @@
 
     <section class="chapters wrap" id="features">
       <article class="chapter">
+        <span class="tag">Models</span>
+        <h2>Local by default. <br>Cloud on demand.</h2>
+        <p class="sub">The model runs on your GPU, and nothing leaves the machine. The cloud is opt in: pick a provider, and the conversation moves there, to the same model or a bigger one, and back.</p>
+        <div class="visual">
+          <div class="diagram models">
+            <div class="box solid">
+              <span class="cap">Your machine</span>
+              <strong><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B</a></strong>
+              <p>No account. No API key. No token bill.</p>
+            </div>
+            <div class="wire dashed"><span>opt in</span></div>
+            <div class="box">
+              <span class="cap">The cloud</span>
+              <strong>Qwen3.8-27B or Qwen3.8 Max</strong>
+              <p>Use the cloud provider of your choosing.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="chapter">
         <span class="tag">Interface</span>
         <h2>An interactive shell. <br>A scriptable tool.</h2>
         <p class="sub">With no arguments, <code>dwim</code> starts an interactive session in the current directory. Given a prompt, it answers and exits.</p>
@@ -547,179 +536,28 @@
           <div class="window">
             <div class="bar"><div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>~/src/project</div>
 <pre class="term"><code><span class="p">$ </span>dwim
-<span class="p">$ </span>dwim "Explain the locking assumptions in this module." &gt; locking.md
-<span class="p">$ </span>dwim --stats "Add a regression test for this failing case."
-<span class="p">$ </span>dwim --shell ./in-container "Find the allocation hot spots."</code></pre>
-          </div>
-        </div>
-        <div class="points">
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-            <h3>The reply is standard output</h3>
-            <p>Nothing else is written there. Progress, the model's thinking, the commands it runs and their output go to standard error. Exit status is 0 or 1.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-5-6-5M12 19h8"/></svg>
-            <h3>Six tools</h3>
-            <p><code>bash</code>, <code>read</code>, <code>write</code>, <code>edit</code>, <code>glob</code> and <code>grep</code>. Commands run as <code>sh -c</code>, or as <code>program -c</code> with <code>--shell</code>, to run them in a container.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8"/></svg>
-            <h3>AGENTS.md</h3>
-            <p>If the working directory has one, its contents are given to the agent as project instructions.</p>
+<span class="p">$ </span>dwim "Add a regression test for this bug."
+<span class="p">$ </span>dwim "Explain the locking here." &gt; locking.md</code></pre>
           </div>
         </div>
       </article>
 
       <article class="chapter">
-        <span class="tag">Local by default</span>
-        <h2>Nothing leaves the machine <br>unless you decide so.</h2>
-        <p class="sub">By default, the model runs in a process on your machine, and a session reaches it over a Unix socket.</p>
+        <span class="tag">One program</span>
+        <h2>One program. <br>Nothing else to install.</h2>
+        <p class="sub">The harness and the inference engine are one Rust binary, with no Python and no separate runtime. To run the model locally, it needs a Mac with 32 GiB of memory, or a Linux GPU with 24 GB of VRAM.</p>
         <div class="visual">
-          <div class="diagram">
+          <div class="diagram models">
             <div class="box solid">
-              <span class="cap">Your machine</span>
-              <div class="chips"><span>$PWD</span><span>dwim</span><span>Qwen3.8-27B</span><span>GPU</span></div>
+              <span class="cap">One binary</span>
+              <strong>dwim</strong>
+              <p>The harness and a local inference engine.</p>
             </div>
-            <div class="wire dashed"><span>only if you ask</span></div>
+            <div class="wire"><span>runs the model on</span></div>
             <div class="box">
-              <span class="cap">Optional</span>
-              <div class="chips"><span>A cloud provider</span></div>
+              <span class="cap">Backends</span>
+              <div class="chips even"><span>Metal</span><span>Vulkan</span><span>Cloud</span></div>
             </div>
-          </div>
-        </div>
-        <div class="points">
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-            <h3>No account, no API key by default</h3>
-            <p>Install it and run it. Only a session at a cloud provider needs a key.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
-            <h3>No token bill by default</h3>
-            <p>A local session costs nothing per token. A session at a cloud provider sends the conversation there, and each request is charged for.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 20h.01M3 3l18 18"/></svg>
-            <h3>Offline once downloaded</h3>
-            <p>The weights are fetched once, at a pinned revision. With <code>HF_HUB_OFFLINE=1</code>, a model that is not in the cache is an error, not a download.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="chapter">
-        <span class="tag">Models</span>
-        <h2>On your GPU, <br>or in the cloud.</h2>
-        <p class="sub">Two models of one family, with one chat format and one way of calling tools. <code>/model</code> moves a session from one to the other, and the conversation goes with it.</p>
-        <div class="visual">
-          <div class="models">
-            <div class="box solid">
-              <span class="cap lit">--model medium (default)</span>
-              <strong><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen3.8-27B</a></strong>
-              <dl>
-                <div><dt>Parameters</dt><dd>27 billion</dd></div>
-                <div><dt>Weights</dt><dd>16 GB, a Q4_0 <a href="https://huggingface.co/bartowski/Qwen3.8-27B-GGUF">GGUF</a></dd></div>
-                <div><dt>Runs</dt><dd>On your machine, or at OpenRouter</dd></div>
-              </dl>
-            </div>
-            <div class="box">
-              <span class="cap lit">--model large</span>
-              <strong>Qwen3.8-2.4T-A95B</strong>
-              <dl>
-                <div><dt>Parameters</dt><dd>2.4 trillion, 95 billion active for a token</dd></div>
-                <div><dt>Weights</dt><dd>The open weights of Qwen3.8 Max</dd></div>
-                <div><dt>Runs</dt><dd>At OpenRouter only</dd></div>
-              </dl>
-            </div>
-          </div>
-        </div>
-        <div class="points">
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            <h3>Speculative decoding</h3>
-            <p>On your machine, a drafter in the model file proposes the next tokens, and the model verifies them in one pass. <code>--speculate n</code> sets how many: 4 by default, 0 for one at a time.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9v6M11 9v6M15 9v6"/></svg>
-            <h3>Context</h3>
-            <p>Locally, a session gets as many tokens as fit in the device's free memory beside the model, and no fewer than 16384. At OpenRouter, 131072. <code>--context</code> overrides.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-            <h3>Compaction</h3>
-            <p>At four fifths of the window, the agent writes itself a note of the task and starts over from the system prompt with the note and the most recent exchanges.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="chapter">
-        <span class="tag">Engine</span>
-        <h2>Its own inference engine, <br>in Rust.</h2>
-        <p class="sub">The GGUF reader, the tokenizer, the transformer and the GPU kernels are part of dwim. There is no Python and no separate runtime to install.</p>
-        <div class="visual">
-          <div class="scroll">
-            <table class="tbl">
-              <thead><tr><th>--device</th><th>Backend</th><th>Kernels</th></tr></thead>
-              <tbody>
-                <tr><td>gpu</td><td>Metal, on Apple silicon</td><td>MSL</td></tr>
-                <tr><td>gpu</td><td>Vulkan 1.1 with VK_KHR_push_descriptor</td><td>WGSL, compiled to SPIR-V at build time</td></tr>
-                <tr><td>cpu</td><td>The reference implementation</td><td>Rust</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="points">
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
-            <h3>What it needs</h3>
-            <p>A Mac with 32 GiB of memory, or a Linux GPU with 24 GB of VRAM, and 16 GB of disk. The CPU works too, slowly.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
-            <h3>Measure it yourself</h3>
-            <p><code>dwim --bench</code> prints tokens per second for reading and for generating, at 1k, 8k, 32k, 64k and 128k tokens of context.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-            <h3>The system prompt is read once</h3>
-            <p>The model's state after the system prompt is saved under <code>~/.cache/dwim/states/</code> and taken up by later runs in place of reading it again.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="chapter">
-        <span class="tag">Server</span>
-        <h2>One process has the weights. <br>Sessions are its clients.</h2>
-        <p class="sub">A session connects to the socket, and starts <code>dwim --serve</code>, detached, when nothing answers. The server exits after ten minutes without a session.</p>
-        <div class="visual">
-          <div class="diagram">
-            <div class="sessions">
-              <span><b>$</b> dwim</span>
-              <span><b>$</b> dwim</span>
-              <span class="more">--sessions n</span>
-            </div>
-            <div class="wire"><span>AF_UNIX</span></div>
-            <div class="box solid">
-              <span class="cap lit">dwim --serve</span>
-              <div class="chips"><span>The weights, loaded once</span><span>A key/value cache for each session</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="points">
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l10 5-10 5L2 7l10-5zM2 12l10 5 10-5M2 17l10 5 10-5"/></svg>
-            <h3>State for each session</h3>
-            <p>The weights are shared. Each session has its own key/value caches and recurrent states on the device, allocated when the server starts. <code>--sessions</code> sets how many: 2 by default.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></svg>
-            <h3>Sessions take turns</h3>
-            <p>The model answers one reply at a time. A session whose turn it is not waits, and says so. One beyond the limit is refused until another ends.</p>
-          </div>
-          <div>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M6.3 7.3a8 8 0 1 0 11.4 0"/></svg>
-            <h3>Yours to supervise</h3>
-            <p><code>dwim --serve</code> runs in the foreground, for a service manager. <code>/server</code> in the shell shows it, stops it, or restarts it.</p>
           </div>
         </div>
       </article>
