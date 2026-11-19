@@ -37,7 +37,6 @@
       --head-a: #ffffff;
       --head-b: #a4a8b0;
       --primary-hover: #d0d2d6;
-      --warn: #e8c268;
       --shade: rgb(0 0 0 / 0.8);
       --term: #0a0a0b;
       --term-bar: #111213;
@@ -66,7 +65,6 @@
         --head-a: #000000;
         --head-b: #4b4f57;
         --primary-hover: #33363b;
-        --warn: #8f5f00;
         --shade: rgb(0 0 0 / 0.22);
       }
     }
@@ -243,25 +241,6 @@
       .demo .ap-wrapper { display: flex; justify-content: center; }
       .demo .mascot { display: none; }
     }
-
-    /* Warning */
-    .notice {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.85rem;
-      margin: 2.5rem auto 0;
-      padding: 1rem 1.2rem;
-      border-radius: 12px;
-      border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
-      background: color-mix(in srgb, var(--warn) 7%, transparent);
-      color: var(--muted);
-      font-size: 0.93rem;
-      line-height: 1.55;
-      text-align: left;
-    }
-    .notice svg { flex: none; width: 1.25rem; height: 1.25rem; margin-top: 0.12rem; fill: none; stroke: var(--warn); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-    .notice p { margin: 0; }
-    .notice strong { color: var(--warn); font-weight: 600; }
 
     /* Sections */
     .section { padding: 5.5rem 0 0; }
@@ -499,11 +478,6 @@
         </div>
         <figcaption>Recorded on a MacBook Pro with an Apple M5 and 32 GB of memory, played back at the speed it ran.</figcaption>
       </figure>
-
-      <div class="notice">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.2 2.6 16h14.8L10 3.2zM10 8.4v3.6M10 14.1v.1"/></svg>
-        <p><strong>dwim is experimental software.</strong> Expect bugs, rough edges, and changes that break things from one commit to the next. The model runs shell commands on your machine without asking first, and dwim does not sandbox them, so run it in a container or a virtual machine, on code you have committed or backed up.</p>
-      </div>
     </section>
 
     <section class="chapters wrap" id="features">
